@@ -1,0 +1,55 @@
+replicaCount: 1
+
+image:
+  repository: 276699358299.dkr.ecr.us-east-2.amazonaws.com/cm-frontend
+  # Placeholder only -- the GitOps values overlay always pins a real tag per
+  # environment, so this default never actually gets deployed as-is.
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+nameOverride: ""
+# Pinned rather than left to derive from the release name, so the Ingress
+# host/Service naming stays predictable across environments.
+fullnameOverride: "cm-frontend"
+
+service:
+  type: ClusterIP
+  port: 8080
+
+serviceAccount:
+  create: true
+  name: ""
+  annotations: {}
+
+# Backend chart's Service is named cm-backend; assumes the backend is deployed
+# into the "backend" namespace, per the GitOps Application's destination.
+backendUrl: http://cm-backend.backend.svc.cluster.local:8080
+pollIntervalMs: 5000
+appVersion: "1.0.0"
+
+# The app defaults this to a Service name that doesn't exist in this cluster
+# (the real otel-collector chart release names its Service
+# otel-collector-opentelemetry-collector), so the chart overrides it explicitly
+# rather than relying on the app's built-in default.
+otelEndpoint: http://otel-collector-opentelemetry-collector.observability.svc.cluster.local:4318
+
+ingress:
+  enabled: true
+  className: alb
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-2:276699358299:certificate/0572f4f6-d3c0-4004-9eb7-1133e5bf6d39
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
+  host: lab-commit-task.commit-lab.internal
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 250m
+    memory: 256Mi
+
+podAnnotations: {}

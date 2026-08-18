@@ -1,0 +1,43 @@
+replicaCount: 1
+
+image:
+  repository: 276699358299.dkr.ecr.us-east-2.amazonaws.com/cm-backend
+  # Placeholder only -- the GitOps values overlay always pins a real tag per
+  # environment, so this default never actually gets deployed as-is.
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+nameOverride: ""
+# Pinned rather than left to derive from the release name, since the frontend
+# chart's BACKEND_URL default hardcodes this Service's DNS name.
+fullnameOverride: "cm-backend"
+
+service:
+  type: ClusterIP
+  port: 8080
+
+serviceAccount:
+  create: true
+  name: ""
+  annotations: {}
+
+# Name of the Secret (provisioned by Terraform, not this chart) holding
+# DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD for the backend to consume
+# via envFrom.
+dbSecretName: cm-backend-db
+
+# The app defaults this to a Service name that doesn't exist in this cluster
+# (the real otel-collector chart release names its Service
+# otel-collector-opentelemetry-collector), so the chart overrides it explicitly
+# rather than relying on the app's built-in default.
+otelEndpoint: http://otel-collector-opentelemetry-collector.observability.svc.cluster.local:4318
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 250m
+    memory: 256Mi
+
+podAnnotations: {}

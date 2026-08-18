@@ -1,0 +1,6 @@
+apiVersion: v2
+name: backend
+description: cm-backend, a Postgres-backed API that serves a sequence value for the Lab-Commit demo
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
