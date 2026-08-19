@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: 276699358299.dkr.ecr.us-east-2.amazonaws.com/cm-backend
+  repository: 276699358299.dkr.ecr.eu-central-1.amazonaws.com/cm-backend
   # Placeholder only -- the GitOps values overlay always pins a real tag per
   # environment, so this default never actually gets deployed as-is.
   tag: "latest"

@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: 276699358299.dkr.ecr.us-east-2.amazonaws.com/cm-frontend
+  repository: 276699358299.dkr.ecr.eu-central-1.amazonaws.com/cm-frontend
   # Placeholder only -- the GitOps values overlay always pins a real tag per
   # environment, so this default never actually gets deployed as-is.
   tag: "latest"
@@ -39,7 +39,7 @@ ingress:
   annotations:
     alb.ingress.kubernetes.io/scheme: internal
     alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-2:276699358299:certificate/0572f4f6-d3c0-4004-9eb7-1133e5bf6d39
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:eu-central-1:276699358299:certificate/a54dc5d3-9d8d-401b-9a41-e6dff8baa5c0
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
     alb.ingress.kubernetes.io/ssl-redirect: '443'
   host: lab-commit-task.commit-lab.internal
